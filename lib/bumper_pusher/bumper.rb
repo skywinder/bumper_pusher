@@ -11,6 +11,7 @@ module BumperPusher
 
     def initialize(options)
       @options = options
+      @spec_file = find_spec_file
     end
 
     def check_repo_is_clean_or_dry_run
@@ -176,7 +177,6 @@ module BumperPusher
 
       check_repo_is_clean_or_dry_run
 
-      spec_file = find_spec_file
       version_file = find_version_file
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
@@ -207,10 +207,10 @@ module BumperPusher
 
       if @options[:push]
         if @spec_mode == POD_SPEC_TYPE
-          execute_line_if_not_dry_run("pod trunk push #{spec_file}")
+          execute_line_if_not_dry_run("pod trunk push #{@spec_file}")
         else
           if @spec_mode == GEM_SPEC_TYPE
-            execute_line_if_not_dry_run("gem build #{spec_file}")
+            execute_line_if_not_dry_run("gem build #{@spec_file}")
             gem = find_current_gem_file
             execute_line_if_not_dry_run("gem push #{gem}")
           else
@@ -221,7 +221,7 @@ module BumperPusher
 
       if @options[:beta]
         if @spec_mode == GEM_SPEC_TYPE
-          execute_line_if_not_dry_run("gem build #{spec_file}")
+          execute_line_if_not_dry_run("gem build #{@spec_file}")
           gem = find_current_gem_file
           execute_line_if_not_dry_run("gem install #{gem}")
           execute_line_if_not_dry_run("git checkout #{version_file}")
@@ -252,11 +252,11 @@ module BumperPusher
           puts 'More than 1 version.rb file found. -> skip'
       end
 
-      version_file ? version_file.sub('./', '') : find_spec_file
+      version_file ? version_file.sub('./', '') : @spec_file
     end
 
     def revert_last_bump
-      spec_file = find_spec_file
+      spec_file = @spec_file
       result, _ = find_version_in_file(spec_file)
 
       puts "DELETE tag #{result} and HARD reset HEAD~1?\nPress Y to continue:"
