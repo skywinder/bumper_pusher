@@ -219,6 +219,16 @@ module BumperPusher
         end
       end
 
+      if @options[:beta]
+        if @spec_mode == GEM_SPEC_TYPE
+          execute_line_if_not_dry_run("gem build #{spec_file}")
+          gem = find_current_gem_file
+          execute_line_if_not_dry_run("gem install #{gem}")
+        else
+          raise 'Unknown spec type'
+        end
+      end
+
 
       if @options[:changelog]
         execute_line_if_not_dry_run("github_changelog_generator")
