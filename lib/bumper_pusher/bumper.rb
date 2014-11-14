@@ -138,6 +138,9 @@ module BumperPusher
 
 
       bumped_version = bumped_result.join('.')
+      if @options[:beta]
+        bumped_version += 'b'
+      end
       puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
       bumped_version
     end
@@ -188,9 +191,6 @@ module BumperPusher
       end
 
       if @options[:bump]
-        if @options[:beta]
-          bumped_version += 'b'
-        end
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
       end
