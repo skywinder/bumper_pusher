@@ -187,18 +187,38 @@ module BumperPusher
         end
       end
 
-      execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
-      execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
-      execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
-      execute_line_if_not_dry_run("git tag #{bumped_version}")
-      execute_line_if_not_dry_run('git push')
-      execute_line_if_not_dry_run('git push --tags')
+      if @options[:bump]
+        if @options[:beta]
+          bumped_version += 'b'
+        end
+        execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
+        execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
+      end
 
-      # execute_line_if_not_dry_run("gem build #{spec_file}")
-      # gem = find_current_gem_file
-      # execute_line_if_not_dry_run("gem push #{gem}")
+      if @options[:commit]
+        execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
+        execute_line_if_not_dry_run("git tag #{bumped_version}")
+      end
 
-      execute_line_if_not_dry_run("pod trunk push #{spec_file}")
+      if @options[:push]
+        execute_line_if_not_dry_run('git push')
+        execute_line_if_not_dry_run('git push --tags')
+      end
+
+      if @options[:push]
+        if @spec_mode == POD_SPEC_TYPE
+          execute_line_if_not_dry_run("pod trunk push #{spec_file}")
+        else
+          if @spec_mode == GEM_SPEC_TYPE
+            execute_line_if_not_dry_run("gem build #{spec_file}")
+            gem = find_current_gem_file
+            execute_line_if_not_dry_run("gem push #{gem}")
+          else
+            raise 'Unknown spec type'
+          end
+        end
+      end
+
 
       if @options[:changelog]
         execute_line_if_not_dry_run("github_changelog_generator")
@@ -217,7 +237,7 @@ module BumperPusher
         when 1
           version_file = arr[0]
         else
-          puts "More than 1 version.rb file found. ->skip"
+          puts 'More than 1 version.rb file found. -> skip'
       end
 
       version_file ? version_file.sub('./', '') : find_spec_file

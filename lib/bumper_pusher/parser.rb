@@ -10,7 +10,7 @@ module BumperPusher
     end
 
     def parse_options
-      options = {:dry_run => false, :bump_number => :patch, :changelog => true}
+      options = {:dry_run => false, :bump_number => :patch, :changelog => true, :bump => true, :commit => true, :build => true, :push => true}
 
       OptionParser.new { |opts|
         opts.banner = 'Usage: bump.rb [options]'
@@ -29,6 +29,14 @@ module BumperPusher
         end
         opts.on('-r', '--revert', 'Revert last bump') do |v|
           options[:revert] = v
+        end
+        opts.on('-b', '--beta', 'Build beta gem without commit and push') do |v|
+          options[:beta] = v
+          options[:bump] = v
+          options[:build] = v
+          options[:commit] = !v
+          options[:push] = !v
+
         end
         opts.on('-v', '--version', 'Print version number') do |v|
           puts "Version: #{BumperPusher::VERSION}"
