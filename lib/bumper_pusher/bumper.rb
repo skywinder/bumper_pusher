@@ -31,8 +31,8 @@ module BumperPusher
 
     def find_spec_file
 
-      gem_arr = execute_line("find . -name '*.#{POD_SPEC_TYPE}'").split("\n")
-      pod_arr = execute_line("find . -name '*.#{GEM_SPEC_TYPE}'").split("\n")
+      pod_arr = execute_line("find . -name '*.#{POD_SPEC_TYPE}'").split("\n")
+      gem_arr = execute_line("find . -name '*.#{GEM_SPEC_TYPE}'").split("\n")
       if gem_arr.any? && pod_arr.any?
         puts 'Warning: both podspec and gemspec found!'.yellow
       end
