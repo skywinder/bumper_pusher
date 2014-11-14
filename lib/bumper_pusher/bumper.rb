@@ -37,7 +37,7 @@ module BumperPusher
       if gem_arr.any? && pod_arr.any?
         puts 'Warning: both podspec and gemspec found!'.yellow
       end
-      all_specs = gem_arr.concat(pod_arr)
+      all_specs = gem_arr | pod_arr
 
       spec_file = ''
 
