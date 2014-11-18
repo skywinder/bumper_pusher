@@ -127,25 +127,25 @@ module BumperPusher
       bumped_result = versions_array.dup
       bumped_result.map! { |x| x.to_i }
 
-      case @options[:bump_number]
-        when :major
-          bumped_result[0] += 1
-          bumped_result[1] = 0
-          bumped_result[2] = 0
-        when :minor
-          bumped_result[1] += 1
-          bumped_result[2] = 0
-        when :patch
-          bumped_result[2] += 1
-        else
-          raise('unknown bump_number')
-      end
-
-
-      bumped_version = bumped_result.join('.')
       if @options[:beta]
-        bumped_version += 'b'
+        bumped_version = versions_array.join('.') += '.0'
+      else
+        case @options[:bump_number]
+          when :major
+            bumped_result[0] += 1
+            bumped_result[1] = 0
+            bumped_result[2] = 0
+          when :minor
+            bumped_result[1] += 1
+            bumped_result[2] = 0
+          when :patch
+            bumped_result[2] += 1
+          else
+            raise('unknown bump_number')
+        end
+        bumped_version = bumped_result.join('.')
       end
+
       puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
       bumped_version
     end
@@ -231,6 +231,7 @@ module BumperPusher
 
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" README.md")
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{version_file}")
+          execute_line_if_not_dry_run("rm #{gem}")
         else
           raise 'Unknown spec type'
         end
@@ -238,9 +239,14 @@ module BumperPusher
 
 
       if @options[:changelog]
-        execute_line_if_not_dry_run("github_changelog_generator")
-        execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
-        execute_line_if_not_dry_run('git push')
+        if `which github_changelog_generator`.empty?
+          puts 'Cancelled bumping: no github_changelog_generator gem found'
+        else
+          execute_line_if_not_dry_run('github_changelog_generator')
+          execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
+          execute_line_if_not_dry_run('git push')
+        end
+
       end
 
     end

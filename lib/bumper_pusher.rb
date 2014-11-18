@@ -29,5 +29,4 @@ end
 if $0 == __FILE__
   bumper = BumperPusher::Pusher.new
 
-
 end
