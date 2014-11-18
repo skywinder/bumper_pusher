@@ -228,8 +228,9 @@ module BumperPusher
           execute_line_if_not_dry_run("gem build #{@spec_file}")
           gem = find_current_gem_file
           execute_line_if_not_dry_run("gem install #{gem}")
-          execute_line_if_not_dry_run("git checkout #{version_file}")
-          execute_line_if_not_dry_run('git checkout README.md')
+
+          execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" README.md")
+          execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{version_file}")
         else
           raise 'Unknown spec type'
         end
