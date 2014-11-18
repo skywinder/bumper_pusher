@@ -23,8 +23,12 @@ module BumperPusher
         if @options[:dry_run]
           puts 'Repo not clean, "Dry run" enabled -> continue'
         else
-          puts 'Repository not clean -> exit'
-          exit
+          if @options[:beta]
+            puts 'Repo not clean, "Beta build" enabled -> continue'
+          else
+            puts 'Repository not clean -> exit'
+            exit
+          end
         end
       end
     end
