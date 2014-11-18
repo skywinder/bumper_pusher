@@ -128,7 +128,7 @@ module BumperPusher
       bumped_result.map! { |x| x.to_i }
 
       if @options[:beta]
-        bumped_version = versions_array.join('.') += '.0'
+        bumped_version = versions_array.join('.') + '.1'
       else
         case @options[:bump_number]
           when :major
