@@ -31,6 +31,12 @@ module BumperPusher
           end
         end
       end
+
+      current_branch = `$(git rev-parse --abbrev-ref HEAD)`
+      if current_branch != 'master'
+        puts "Warning: You're not in 'master' branch!".yellow
+        ask_sure_Y
+      end
     end
 
 
@@ -150,7 +156,21 @@ module BumperPusher
       end
 
       puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
+
+      unless @options[:dry_run] || @options[:beta]
+        ask_sure_Y
+      end
+
       bumped_version
+    end
+
+    def ask_sure_Y
+      puts 'Are you sure? Press Y to continue:'
+      str = gets.chomp
+      if str != 'Y'
+        puts '-> exit'
+        exit
+      end
     end
 
     def execute_line(line)
@@ -187,15 +207,6 @@ module BumperPusher
       version_file = find_version_file
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
-
-      unless @options[:dry_run] || @options[:beta]
-        puts 'Are you sure? Press Y to continue:'
-        str = gets.chomp
-        if str != 'Y'
-          puts '-> exit'
-          exit
-        end
-      end
 
       if @options[:bump]
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
