@@ -13,7 +13,7 @@ module BumperPusher
       options = {:dry_run => false, :bump_number => :patch, :changelog => true, :bump => true, :commit => true, :build => true, :push => true, :install => true}
 
       OptionParser.new { |opts|
-        opts.banner = 'Usage: bump.rb [options]'
+        opts.banner = 'Usage: bumper_pusher [options]'
 
         opts.on('-d', '--dry-run', 'Dry run') do |v|
           options[:dry_run] = v
