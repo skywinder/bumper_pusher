@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Bumper pusher : Easiest way to bump your specs">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bumper pusher</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/skywinder/bumper_pusher">View on GitHub</a>
+
+          <h1 id="project_title">Bumper pusher</h1>
+          <h2 id="project_tagline">Easiest way to bump your specs</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/skywinder/bumper_pusher/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/skywinder/bumper_pusher/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="bumperpusher" class="anchor" href="#bumperpusher" aria-hidden="true"><span class="octicon octicon-link"></span></a>BumperPusher</h1>
+
+<p>This gem make bumping and pushing your ruby gems easy and fast!</p>
+
+<ul>
+<li>Works with <code>gemspec</code> and <code>podspec</code> files</li>
+<li>Automatically detect your current version (from <code>spec</code> or <code>version.rb</code> file)</li>
+<li>Auto-bump spec</li>
+<li>Auto-push spec</li>
+</ul>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<pre><code>[sudo] gem install bumper_pusher
+</code></pre>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<ul>
+<li>Just print: <code>bumper_pusher</code> and that's it!</li>
+<li>If you want to test, that all works as expected: try <strong>dry_run</strong> mode: <code>bumper_pusher --dry-run</code> </li>
+<li>
+<p>To bump version print: <code>bumper_pusher [option]</code></p>
+
+<ul>
+<li> <code>-r</code> for bump release (<code>1.2.3</code> -&gt; <code>2.0.0</code>)</li>
+<li>
+<code>-m</code> for bump minor (<code>1.2.3</code> -&gt; <code>1.3.0</code>)</li>
+<li>
+<code>-p</code> for bump patch (<code>1.2.3</code> -&gt; <code>1.2.4</code>) <strong>default option</strong>
+</li>
+</ul>
+</li>
+<li><p>To install locally your gemspec <code>bumper_pusher -b</code></p></li>
+</ul>
+
+<h3>
+<a id="params" class="anchor" href="#params" aria-hidden="true"><span class="octicon octicon-link"></span></a>Params</h3>
+
+<pre><code>Usage: bumper_pusher [options]
+    -d, --dry-run                    Dry run
+        --release                    Bump release version
+    -m, --minor                      Bump minor version
+    -p, --patch                      Bump patch version
+    -r, --revert                     Revert last bump
+    -i, --[no-]install               Install this gem after push it. Default is true.
+    -b, --beta                       Build beta gem without commit and push
+    -v, --version                    Print version number
+    -c, --[no]-changelog             Auto generation of changelog and pushing it origin. Default is true
+</code></pre>
+
+<h2>
+<a id="alternatives" class="anchor" href="#alternatives" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alternatives</h2>
+
+<ul>
+<li><a href="https://github.com/peritus/bumpversion">https://github.com/peritus/bumpversion</a></li>
+<li><a href="https://github.com/vojtajina/grunt-bump">https://github.com/vojtajina/grunt-bump</a></li>
+<li><a href="https://github.com/gregorym/bump">https://github.com/gregorym/bump</a></li>
+<li><a href="https://github.com/svenfuchs/gem-release">https://github.com/svenfuchs/gem-release</a></li>
+</ul>
+
+<h2>
+<a id="features--benefits-of-this-project" class="anchor" href="#features--benefits-of-this-project" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features &amp; Benefits of this project</h2>
+
+<ul>
+<li>
+<strong>Very easy to use</strong>: just print <code>bumper_pusher</code> in your repo folder.</li>
+<li>Support version storage directly in <code>gemspec</code> file and in <code>version.rb</code>
+</li>
+<li>Check that you're bumping from <code>master</code>. (otherwise print warning with confirmation)</li>
+<li>Check that your <code>git status</code> in clean</li>
+<li>Ability to build test gem easily  <code>bumper_pusher -b</code>
+</li>
+<li>Ability to generate changelog for new version by <a href="https://github.com/skywinder/Github-Changelog-Generator">github_changelog_generator</a>
+</li>
+<li>Support both <code>gemspec</code> and <code>podspec</code> files</li>
+</ul>
+
+<h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contributing</h2>
+
+<ol>
+<li>Fork it ( <a href="https://github.com/skywinder/bumper_pusher/fork">https://github.com/skywinder/bumper_pusher/fork</a> )</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bumper pusher maintained by <a href="https://github.com/skywinder">skywinder</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
