@@ -217,6 +217,11 @@ module BumperPusher
             execute_line_if_not_dry_run("gem build #{@spec_file}")
             gem = find_current_gem_file
             execute_line_if_not_dry_run("gem push #{gem}")
+
+            if @options[:install]
+              execute_line_if_not_dry_run("gem install #{gem}")
+            end
+
             execute_line_if_not_dry_run("rm #{gem}")
           else
             raise 'Unknown spec type'
