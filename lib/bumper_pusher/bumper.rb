@@ -238,7 +238,7 @@ module BumperPusher
       end
 
 
-      if @options[:changelog]
+      if @options[:changelog] && !@options[:beta]
         if `which github_changelog_generator`.empty?
           puts 'Cancelled bumping: no github_changelog_generator gem found'
         else
@@ -246,7 +246,6 @@ module BumperPusher
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           execute_line_if_not_dry_run('git push')
         end
-
       end
 
     end
