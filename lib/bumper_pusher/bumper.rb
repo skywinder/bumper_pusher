@@ -188,7 +188,7 @@ module BumperPusher
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
 
-      unless @options[:dry_run]
+      unless @options[:dry_run] || @options[:beta]
         puts 'Are you sure? Press Y to continue:'
         str = gets.chomp
         if str != 'Y'
