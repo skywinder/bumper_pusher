@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.1.4] (https://github.com/skywinder/bumper_pusher/tree/0.1.4)
+#### 19/11/14
 ## [0.1.3] (https://github.com/skywinder/bumper_pusher/tree/0.1.3)
 #### 19/11/14
 - *Merged pull-request:* Add check and warrning message, if you try to bump not from master branch [\#4](https://github.com/skywinder/bumper_pusher/pull/4) ([skywinder](https://github.com/skywinder))
