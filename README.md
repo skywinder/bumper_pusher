@@ -1,34 +1,26 @@
 # BumperPusher
 
-TODO: Write a gem description
+This gem make bumping and pushing your ruby gems easy and fast!
+
+- Works with `gemspec` and `podspec` files
+- Automatically detect your current version (from `spec` or `version.rb` file)
+- Auto-bump spec
+- Auto-push spec
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'bumper_pusher'
-```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install bumper_pusher
+	[sudo] gem install bumper_pusher
 
 ## Usage
-- To bump path version and push your gemspec or podscpec file: `bumper_pusher`
-	-  `-r` for bump release
-	- `-m` for bump minor 
-	- `-p` for bump patch (default option)
+- Just print: `bumper_pusher` and that's it!
+- If you want to test, that all works as expected: try **dry_run** mode: `bumper_pusher --dry-run` 
+- To bump version print: `bumper_pusher [option]`
+	-  `-r` for bump release (`1.2.3` -> `2.0.0`)
+	- `-m` for bump minor (`1.2.3` -> `1.3.0`)
+	- `-p` for bump patch (`1.2.3` -> `1.2.4`) **default option**
 	
 - To install locally your gemspec `bumper_pusher -b`
 
-..Look at **Params** section for details.
-
-### Params:
+### Params
 	Usage: bumper_pusher [options]
 	    -d, --dry-run                    Dry run
 	        --release                    Bump release version
@@ -39,6 +31,23 @@ Or install it yourself as:
 	    -b, --beta                       Build beta gem without commit and push
 	    -v, --version                    Print version number
 	    -c, --[no]-changelog             Auto generation of changelog and pushing it origin. Default is true
+
+## Alternatives
+- https://github.com/peritus/bumpversion
+- https://github.com/vojtajina/grunt-bump
+- https://github.com/gregorym/bump
+- https://github.com/svenfuchs/gem-release
+
+## Features & Benefits of this project
+
+- **Very easy to use**: just print `bumper_pusher` in your repo folder.
+- Support version storage directly in `gemspec` file and in `version.rb`
+- Check that you're bumping from `master`. (otherwise print warning with confirmation)
+- Check that your `git status` in clean
+- Ability to build test gem easily  `bumper_pusher -b`
+- Ability to generate changelog for new version by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
+- Support both `gemspec` and `podspec` files
+
 ## Contributing
 
 1. Fork it ( https://github.com/skywinder/bumper_pusher/fork )
