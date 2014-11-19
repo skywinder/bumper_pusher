@@ -32,9 +32,9 @@ module BumperPusher
         end
       end
 
-      current_branch = `$(git rev-parse --abbrev-ref HEAD)`
+      current_branch = `git rev-parse --abbrev-ref HEAD`.strip!
       if current_branch != 'master'
-        puts "Warning: You're not in 'master' branch!".yellow
+        puts "Warning: You're not in 'master' branch (#{current_branch})!".yellow
         ask_sure_Y
       end
     end
