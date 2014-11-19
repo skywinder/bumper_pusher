@@ -86,6 +86,9 @@ module BumperPusher
 
       case arr.count
         when 0
+          if @options[:dry_run]
+            return "test.#{POD_SPEC_TYPE}"
+          end
           puts "No #{POD_SPEC_TYPE} files found. -> Exit."
           exit
         when 1

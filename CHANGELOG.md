@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.2] (https://github.com/skywinder/bumper_pusher/tree/0.1.2)
+#### 19/11/14
+- *Merged pull-request:* Install and remove gem after push [\#2](https://github.com/skywinder/bumper_pusher/pull/2)
+
+- *Merged pull-request:* Don't generate changelog for beta build [\#1](https://github.com/skywinder/bumper_pusher/pull/1)
+
 ## [0.1.1] (https://github.com/skywinder/bumper_pusher/tree/0.1.1)
 #### 18/11/14
 ## [0.1.0] (https://github.com/skywinder/bumper_pusher/tree/0.1.0)
