@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["sky4winder@gmail.com"]
   spec.summary       = %q{Easiest way to bump your specs}
   spec.description   = %q{Bumping and pushing your ruby gems easy and fast!}
-  spec.homepage      = ""
+  spec.homepage      = %q{https://github.com/skywinder/bumper_pusher}
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
