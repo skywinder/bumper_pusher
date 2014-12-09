@@ -272,10 +272,12 @@ module BumperPusher
 
         if is_gitflow_installed
           execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}")
+          execute_line_if_not_dry_run('git checkout master')
+          execute_line_if_not_dry_run("git tag #{bumped_version}")
+          execute_line_if_not_dry_run('git checkout develop')
+        else
+          execute_line_if_not_dry_run("git tag #{bumped_version}")
         end
-
-        execute_line_if_not_dry_run("git tag #{bumped_version}")
-
       end
 
       if @options[:push]
