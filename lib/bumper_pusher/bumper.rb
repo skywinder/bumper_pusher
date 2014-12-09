@@ -247,6 +247,10 @@ module BumperPusher
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
 
+      if is_gitflow_installed
+        execute_line_if_not_dry_run("git flow release start #{bumped_version}")
+      end
+
       if @options[:bump]
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
@@ -254,7 +258,13 @@ module BumperPusher
 
       if @options[:commit]
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
-        execute_line_if_not_dry_run("git tag #{bumped_version}")
+
+        if is_gitflow_installed
+          execute_line_if_not_dry_run("git flow release finish #{bumped_version}")
+        else
+          execute_line_if_not_dry_run("git tag #{bumped_version}")
+        end
+
       end
 
       if @options[:push]
@@ -339,6 +349,9 @@ module BumperPusher
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
 
+    def is_gitflow_installed()
+      puts system("git flow version")? true : false
+    end
   end
 
 end
