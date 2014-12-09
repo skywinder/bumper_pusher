@@ -197,6 +197,41 @@ module BumperPusher
       end
     end
 
+    def execute_interactive_if_not_dry_run(cmd)
+      if @options[:dry_run]
+        puts "Dry run: #{cmd}"
+        nil
+      else
+        Open3.popen3(cmd) do |i, o, e, th|
+          Thread.new {
+            until i.closed? do
+              input =Readline.readline("", true).strip
+              i.puts input
+            end
+          }
+
+          t_err = Thread.new {
+            until e.eof? do
+              putc e.readchar
+            end
+          }
+
+          t_out = Thread.new {
+            until o.eof? do
+              putc o.readchar
+            end
+          }
+
+          Process::waitpid(th.pid) rescue nil
+          # "rescue nil" is there in case process already ended.
+
+          t_err.join
+          t_out.join
+        end
+      end
+    end
+
+
     def check_exit_status(output)
       if $?.exitstatus != 0
         puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
@@ -304,40 +339,6 @@ module BumperPusher
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
 
-    def execute_interactive_if_not_dry_run(cmd)
-      if @options[:dry_run]
-        puts "Dry run: #{cmd}"
-        nil
-      else
-
-        Open3.popen3(cmd) do |i, o, e, th|
-          Thread.new {
-            until i.closed? do
-              input =Readline.readline("", true).strip
-              i.puts input
-            end
-          }
-
-          t_err = Thread.new {
-            until e.eof? do
-              putc e.readchar
-            end
-          }
-
-          t_out = Thread.new {
-            until o.eof? do
-              putc o.readchar
-            end
-          }
-
-          Process::waitpid(th.pid) rescue nil
-          # "rescue nil" is there in case process already ended.
-
-          t_err.join
-          t_out.join
-        end
-      end
-    end
   end
 
 end
