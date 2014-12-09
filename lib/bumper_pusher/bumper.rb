@@ -1,5 +1,6 @@
 require 'colorize'
-
+require "readline"
+require 'open3'
 module BumperPusher
 
   POD_SPEC_TYPE = 'podspec'
@@ -35,8 +36,8 @@ module BumperPusher
       current_branch = `git rev-parse --abbrev-ref HEAD`.strip!
 
       unless @options[:beta]
-        if current_branch != 'master' || current_branch != 'release'
-          puts "Warning: You're not in branch (#{current_branch})!".yellow
+        if current_branch != 'master' || !/release/.match(current_branch)[0].nil?
+          puts "Warning: You're in branch (#{current_branch})!".yellow
           ask_sure_Y
         end
       end
@@ -196,6 +197,41 @@ module BumperPusher
       end
     end
 
+    def execute_interactive_if_not_dry_run(cmd)
+      if @options[:dry_run]
+        puts "Dry run: #{cmd}"
+        nil
+      else
+        Open3.popen3(cmd) do |i, o, e, th|
+          Thread.new {
+            until i.closed? do
+              input =Readline.readline("", true).strip
+              i.puts input
+            end
+          }
+
+          t_err = Thread.new {
+            until e.eof? do
+              putc e.readchar
+            end
+          }
+
+          t_out = Thread.new {
+            until o.eof? do
+              putc o.readchar
+            end
+          }
+
+          Process::waitpid(th.pid) rescue nil
+          # "rescue nil" is there in case process already ended.
+
+          t_err.join
+          t_out.join
+        end
+      end
+    end
+
+
     def check_exit_status(output)
       if $?.exitstatus != 0
         puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
@@ -211,6 +247,10 @@ module BumperPusher
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
 
+      if is_gitflow_installed
+        execute_line_if_not_dry_run("git flow release start #{bumped_version}")
+      end
+
       if @options[:bump]
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
@@ -218,7 +258,13 @@ module BumperPusher
 
       if @options[:commit]
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
-        execute_line_if_not_dry_run("git tag #{bumped_version}")
+
+        if is_gitflow_installed
+          execute_line_if_not_dry_run("git flow release finish #{bumped_version}")
+        else
+          execute_line_if_not_dry_run("git tag #{bumped_version}")
+        end
+
       end
 
       if @options[:push]
@@ -250,7 +296,7 @@ module BumperPusher
         if @spec_mode == GEM_SPEC_TYPE
           execute_line_if_not_dry_run("gem build #{@spec_file}")
           gem = find_current_gem_file
-          execute_line_if_not_dry_run("gem install #{gem}")
+          execute_interactive_if_not_dry_run("gem install #{gem}")
 
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" README.md")
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{version_file}")
@@ -302,5 +348,15 @@ module BumperPusher
       execute_line_if_not_dry_run('git reset --hard HEAD~1')
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
+
+    def is_gitflow_installed()
+      puts system("git flow version")? true : false
+    end
   end
+
+end
+
+if $0 == __FILE__
+  puts "bumper.rb self run"
+  BumperPusher::Bumper.new({}).execute_interactive_if_not_dry_run("pwd")
 end
