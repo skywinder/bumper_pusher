@@ -36,10 +36,21 @@ module BumperPusher
       current_branch = `git rev-parse --abbrev-ref HEAD`.strip!
 
       unless @options[:beta]
-        if current_branch != 'master' || !/release/.match(current_branch)[0].nil?
-          puts "Warning: You're in branch (#{current_branch})!".yellow
-          ask_sure_Y
+
+        if is_gitflow_installed
+          # supposed, that with git flow you should release from develop branch
+          if current_branch != 'develop'
+            puts "Warning: You're in branch (#{current_branch})!".yellow
+            ask_sure_Y
+          end
+        else
+          # supposed, that w/o git flow you should release from master or release branch
+          if current_branch != 'master' || !/release/.match(current_branch)[0].nil?
+            puts "Warning: You're in branch (#{current_branch})!".yellow
+            ask_sure_Y
+          end
         end
+
       end
     end
 
@@ -247,7 +258,7 @@ module BumperPusher
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
 
-      if is_gitflow_installed
+      if is_gitflow_installed && !@options[:beta]
         execute_line_if_not_dry_run("git flow release start #{bumped_version}")
       end
 
@@ -270,9 +281,7 @@ module BumperPusher
       if @options[:push]
         execute_line_if_not_dry_run('git push')
         execute_line_if_not_dry_run('git push --tags')
-      end
 
-      if @options[:push]
         if @spec_mode == POD_SPEC_TYPE
           execute_line_if_not_dry_run("pod trunk push #{@spec_file}")
         else
@@ -350,7 +359,7 @@ module BumperPusher
     end
 
     def is_gitflow_installed()
-      puts system("git flow version")? true : false
+      system("git flow version")? true : false
     end
   end
 
