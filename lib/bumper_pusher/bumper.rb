@@ -271,10 +271,10 @@ module BumperPusher
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
         if is_gitflow_installed
-          execute_line_if_not_dry_run("git flow release finish #{bumped_version}")
-        else
-          execute_line_if_not_dry_run("git tag #{bumped_version}")
+          execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}")
         end
+
+        execute_line_if_not_dry_run("git tag #{bumped_version}")
 
       end
 
