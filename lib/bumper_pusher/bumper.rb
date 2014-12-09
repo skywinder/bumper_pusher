@@ -35,7 +35,7 @@ module BumperPusher
       current_branch = `git rev-parse --abbrev-ref HEAD`.strip!
 
       unless @options[:beta]
-        if current_branch != 'master' || current_branch != 'release'
+        if current_branch != 'master' || !/release/.match(current_branch)[0].nil?
           puts "Warning: You're in branch (#{current_branch})!".yellow
           ask_sure_Y
         end
