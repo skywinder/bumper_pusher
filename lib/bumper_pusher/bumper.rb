@@ -1,5 +1,6 @@
 require 'colorize'
-
+require "readline"
+require 'open3'
 module BumperPusher
 
   POD_SPEC_TYPE = 'podspec'
@@ -250,7 +251,7 @@ module BumperPusher
         if @spec_mode == GEM_SPEC_TYPE
           execute_line_if_not_dry_run("gem build #{@spec_file}")
           gem = find_current_gem_file
-          execute_line_if_not_dry_run("gem install #{gem}")
+          execute_interactive_if_not_dry_run("gem install #{gem}")
 
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" README.md")
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{version_file}")
@@ -302,5 +303,46 @@ module BumperPusher
       execute_line_if_not_dry_run('git reset --hard HEAD~1')
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
+
+    def execute_interactive_if_not_dry_run(cmd)
+      if @options[:dry_run]
+        puts "Dry run: #{cmd}"
+        nil
+      else
+
+        Open3.popen3(cmd) do |i, o, e, th|
+          Thread.new {
+            until i.closed? do
+              input =Readline.readline("", true).strip
+              i.puts input
+            end
+          }
+
+          t_err = Thread.new {
+            until e.eof? do
+              putc e.readchar
+            end
+          }
+
+          t_out = Thread.new {
+            until o.eof? do
+              putc o.readchar
+            end
+          }
+
+          Process::waitpid(th.pid) rescue nil
+          # "rescue nil" is there in case process already ended.
+
+          t_err.join
+          t_out.join
+        end
+      end
+    end
   end
+
+end
+
+if $0 == __FILE__
+  puts "bumper.rb self run"
+  BumperPusher::Bumper.new({}).execute_interactive_if_not_dry_run("pwd")
 end
