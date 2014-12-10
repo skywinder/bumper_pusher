@@ -329,7 +329,7 @@ module BumperPusher
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           if is_gitflow_installed
-            execute_line_if_not_dry_run("git flow hotfix finish update-changelog")
+            execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog")
           else
             execute_line_if_not_dry_run('git push')
           end
