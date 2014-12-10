@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.8] (https://github.com/skywinder/bumper_pusher/tree/0.1.8)
+#### 10/12/14
+## [0.1.7] (https://github.com/skywinder/bumper_pusher/tree/0.1.7)
+#### 10/12/14
+- *Merged pull-request:* Fix tag not in master [\#9](https://github.com/skywinder/bumper_pusher/pull/9) ([skywinder](https://github.com/skywinder))
+
+## [0.1.6] (https://github.com/skywinder/bumper_pusher/tree/0.1.6)
+#### 09/12/14
+- *Merged pull-request:* Add gitflow support [\#8](https://github.com/skywinder/bumper_pusher/pull/8) ([skywinder](https://github.com/skywinder))
+
+- *Implemented enhancement:* Add support for git flow strategy [\#6](https://github.com/skywinder/bumper_pusher/issues/6)
+
 ## [0.1.5] (https://github.com/skywinder/bumper_pusher/tree/0.1.5)
 #### 09/12/14
 ## [0.0.1] (https://github.com/skywinder/bumper_pusher/tree/0.0.1)
