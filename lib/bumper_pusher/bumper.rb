@@ -322,9 +322,18 @@ module BumperPusher
         if `which github_changelog_generator`.empty?
           puts 'Cancelled bumping: no github_changelog_generator gem found'
         else
+
+          if is_gitflow_installed
+            execute_line_if_not_dry_run("git flow hotfix start update-changelog")
+          end
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
-          execute_line_if_not_dry_run('git push')
+          if is_gitflow_installed
+            execute_line_if_not_dry_run("git flow hotfix finish update-changelog")
+          else
+            execute_line_if_not_dry_run('git push')
+          end
+
         end
       end
 
