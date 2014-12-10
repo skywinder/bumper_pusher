@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
 
   spec.add_runtime_dependency(%q<colorize>, ["~> 0.7"])
+  spec.add_runtime_dependency(%q<github_changelog_generator>, [">= 1.2"])
 end
