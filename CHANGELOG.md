@@ -1,5 +1,7 @@
 # Changelog
 
+## [0.1.9] (https://github.com/skywinder/bumper_pusher/tree/0.1.9)
+#### 10/12/14
 ## [0.1.8] (https://github.com/skywinder/bumper_pusher/tree/0.1.8)
 #### 10/12/14
 ## [0.1.7] (https://github.com/skywinder/bumper_pusher/tree/0.1.7)
