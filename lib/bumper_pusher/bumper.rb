@@ -340,6 +340,8 @@ module BumperPusher
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           if is_gitflow_installed
             execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog")
+            current_branch = get_current_branch
+            execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{current_branch}")
           else
             execute_line_if_not_dry_run('git push')
           end
