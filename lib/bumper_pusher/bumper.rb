@@ -33,7 +33,7 @@ module BumperPusher
         end
       end
 
-      current_branch = `git rev-parse --abbrev-ref HEAD`.strip!
+      current_branch = get_current_branch()
 
       unless @options[:beta]
 
@@ -52,6 +52,10 @@ module BumperPusher
         end
 
       end
+    end
+
+    def get_current_branch
+      `git rev-parse --abbrev-ref HEAD`.strip!
     end
 
 
@@ -253,6 +257,12 @@ module BumperPusher
     def run_bumping_script
 
       check_repo_is_clean_or_dry_run
+
+      unless @options[:beta]
+        execute_line_if_not_dry_run('git pull')
+        current_branch = get_current_branch
+        execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
+      end
 
       version_file = find_version_file
       result, versions_array = find_version_in_file(version_file)
