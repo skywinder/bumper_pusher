@@ -206,11 +206,13 @@ module BumperPusher
       else
         puts line
         value = %x[#{line}]
-        puts value
         if check_exit
+          puts value
           check_exit_status(value)
+          value
+        else
+          $?.exitstatus
         end
-        value
       end
     end
 
@@ -283,8 +285,8 @@ module BumperPusher
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
         if is_gitflow_installed
-          execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false)
-          if $?.exitstatus != 0
+
+          if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
             execute_line_if_not_dry_run('git checkout master')
             execute_line_if_not_dry_run("git tag #{bumped_version}")
             execute_line_if_not_dry_run('git checkout develop')
@@ -345,8 +347,8 @@ module BumperPusher
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           if is_gitflow_installed
-            execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false)
-            if $?.exitstatus != 0
+
+            if execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false) == 0
               current_branch = get_current_branch
               execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{current_branch}")
             else
