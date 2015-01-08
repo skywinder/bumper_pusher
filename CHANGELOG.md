@@ -1,11 +1,13 @@
 # Changelog
 
+## [0.1.11] (https://github.com/skywinder/bumper_pusher/tree/0.1.11)
+#### 08/01/15
 ## [0.1.10] (https://github.com/skywinder/bumper_pusher/tree/0.1.10)
 #### 11/12/14
-- *Closed issue:* Push after update changelog [\#10](https://github.com/skywinder/bumper_pusher/issues/10)
-
 ## [0.1.9] (https://github.com/skywinder/bumper_pusher/tree/0.1.9)
 #### 10/12/14
+- *Closed issue:* Push after update changelog [\#10](https://github.com/skywinder/bumper_pusher/issues/10)
+
 ## [0.1.8] (https://github.com/skywinder/bumper_pusher/tree/0.1.8)
 #### 10/12/14
 ## [0.1.7] (https://github.com/skywinder/bumper_pusher/tree/0.1.7)
