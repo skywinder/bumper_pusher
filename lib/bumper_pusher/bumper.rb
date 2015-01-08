@@ -199,16 +199,20 @@ module BumperPusher
       output
     end
 
-    def execute_line_if_not_dry_run(line)
+    def execute_line_if_not_dry_run(line, check_exit = true)
       if @options[:dry_run]
         puts "Dry run: #{line}"
         nil
       else
         puts line
         value = %x[#{line}]
-        puts value
-        check_exit_status(value)
-        value
+        if check_exit
+          puts value
+          check_exit_status(value)
+          value
+        else
+          $?.exitstatus
+        end
       end
     end
 
@@ -269,7 +273,7 @@ module BumperPusher
       bumped_version = bump_version(versions_array)
 
       if is_gitflow_installed && !@options[:beta]
-        execute_line_if_not_dry_run("git flow release start #{bumped_version}")
+        execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
       end
 
       if @options[:bump]
@@ -281,10 +285,14 @@ module BumperPusher
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
         if is_gitflow_installed
-          execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}")
-          execute_line_if_not_dry_run('git checkout master')
-          execute_line_if_not_dry_run("git tag #{bumped_version}")
-          execute_line_if_not_dry_run('git checkout develop')
+
+          if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
+            execute_line_if_not_dry_run('git checkout master')
+            execute_line_if_not_dry_run("git tag #{bumped_version}")
+            execute_line_if_not_dry_run('git checkout develop')
+          else
+            execute_line_if_not_dry_run("git tag #{bumped_version}")
+          end
         else
           execute_line_if_not_dry_run("git tag #{bumped_version}")
         end
@@ -334,14 +342,19 @@ module BumperPusher
         else
 
           if is_gitflow_installed
-            execute_line_if_not_dry_run("git flow hotfix start update-changelog")
+            execute_line_if_not_dry_run("git flow hotfix start update-changelog", check_exit = false)
           end
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           if is_gitflow_installed
-            execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog")
-            current_branch = get_current_branch
-            execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{current_branch}")
+
+            if execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false) == 0
+              current_branch = get_current_branch
+              execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{current_branch}")
+            else
+              execute_line_if_not_dry_run('git push')
+            end
+
           else
             execute_line_if_not_dry_run('git push')
           end
@@ -382,7 +395,7 @@ module BumperPusher
     end
 
     def is_gitflow_installed()
-      system("git flow version")? true : false
+      system("git flow version") ? true : false
     end
   end
 
