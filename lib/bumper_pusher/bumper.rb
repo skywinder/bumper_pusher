@@ -288,19 +288,13 @@ module BumperPusher
 
           if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
             execute_line_if_not_dry_run('git checkout master')
-            execute_line_if_not_dry_run('git push origin')
-            execute_line_if_not_dry_run("git tag #{bumped_version}")
-            execute_line_if_not_dry_run('git checkout develop')
-          else
-            execute_line_if_not_dry_run("git tag #{bumped_version}")
           end
-        else
-          execute_line_if_not_dry_run("git tag #{bumped_version}")
         end
+        execute_line_if_not_dry_run('git push --all')
+        execute_line_if_not_dry_run("git tag #{bumped_version}")
       end
 
       if @options[:push]
-        execute_line_if_not_dry_run('git push')
         execute_line_if_not_dry_run('git push --tags')
 
         if @spec_mode == POD_SPEC_TYPE
