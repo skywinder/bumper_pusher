@@ -266,6 +266,7 @@ module BumperPusher
         execute_line_if_not_dry_run('git pull')
         current_branch = get_current_branch
         execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
+        execute_line_if_not_dry_run('git push --all')
       end
 
       version_file = find_version_file
@@ -274,10 +275,9 @@ module BumperPusher
 
 
       unless @options[:beta]
-        execute_line_if_not_dry_run('git push --all')
           if is_gitflow_installed
           execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
-        end
+          end
       end
 
       if @options[:bump]
@@ -294,6 +294,7 @@ module BumperPusher
             execute_line_if_not_dry_run('git checkout master')
           end
         end
+        execute_line_if_not_dry_run('git push --all')
         execute_line_if_not_dry_run("git tag #{bumped_version}")
       end
 
