@@ -1,3 +1,7 @@
+[![Gem Version](https://badge.fury.io/rb/bumper_pusher.svg)](http://badge.fury.io/rb/bumper_pusher)
+[![Build Status](https://travis-ci.org/skywinder/bumper_pusher.svg?branch=master)](https://travis-ci.org/skywinder/bumper_pusher)
+
+
 # BumperPusher
 
 This gem make bumping and pushing your ruby gems easy and fast!
