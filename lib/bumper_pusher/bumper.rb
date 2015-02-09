@@ -272,9 +272,12 @@ module BumperPusher
       result, versions_array = find_version_in_file(version_file)
       bumped_version = bump_version(versions_array)
 
-      execute_line_if_not_dry_run('git push --all')
-      if is_gitflow_installed && !@options[:beta]
-        execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
+
+      unless @options[:beta]
+        execute_line_if_not_dry_run('git push --all')
+          if is_gitflow_installed
+          execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
+        end
       end
 
       if @options[:bump]
