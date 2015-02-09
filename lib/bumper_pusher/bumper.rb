@@ -288,6 +288,7 @@ module BumperPusher
 
           if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
             execute_line_if_not_dry_run('git checkout master')
+            execute_line_if_not_dry_run('git push origin')
             execute_line_if_not_dry_run("git tag #{bumped_version}")
             execute_line_if_not_dry_run('git checkout develop')
           else

@@ -1,0 +1,15 @@
+language: ruby
+before_install:
+  - gem update --system
+  - gem --version
+rvm:
+  - 2.1.0
+gemfile:
+  - Gemfile
+
+notifications:
+  email:
+    recipients:
+      - sky4winder+bumper_pusher@gmail.com
+    on_success: never # [always|never|change]
+    on_failure: change # [always|never|change]
