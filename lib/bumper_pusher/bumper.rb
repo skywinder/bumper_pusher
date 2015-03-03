@@ -304,9 +304,9 @@ module BumperPusher
         if is_git_flow_installed
           if is_branch_hotfix?
             branch_split = get_current_branch.split('/').last
-            if execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}", check_exit = false) == 0
-              execute_line_if_not_dry_run('git checkout master')
-            end
+            execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}")
+            execute_line_if_not_dry_run('git checkout master')
+
           else
             if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
               execute_line_if_not_dry_run('git checkout master')
