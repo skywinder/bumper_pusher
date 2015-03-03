@@ -37,7 +37,7 @@ module BumperPusher
 
       unless @options[:beta]
 
-        if is_gitflow_installed
+        if is_git_flow_installed
           # supposed, that with git flow you should release from develop branch
           if current_branch != 'develop'
             puts "Warning: You're in branch (#{current_branch})!".yellow
@@ -275,7 +275,7 @@ module BumperPusher
 
       unless @options[:beta]
         execute_line_if_not_dry_run('git push --all')
-          if is_gitflow_installed
+        if is_git_flow_installed
           execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
         end
       end
@@ -288,7 +288,7 @@ module BumperPusher
       if @options[:commit]
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
-        if is_gitflow_installed
+        if is_git_flow_installed
 
           if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
             execute_line_if_not_dry_run('git checkout master')
@@ -339,12 +339,12 @@ module BumperPusher
           puts 'Cancelled bumping: no github_changelog_generator gem found'
         else
 
-          if is_gitflow_installed
+          if is_git_flow_installed
             execute_line_if_not_dry_run("git flow hotfix start update-changelog", check_exit = false)
           end
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
-          if is_gitflow_installed
+          if is_git_flow_installed
 
             if execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false) == 0
               current_branch = get_current_branch
@@ -392,7 +392,7 @@ module BumperPusher
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
 
-    def is_gitflow_installed()
+    def is_git_flow_installed
       system("git flow version") ? true : false
     end
   end
