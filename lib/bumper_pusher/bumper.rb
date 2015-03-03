@@ -39,7 +39,7 @@ module BumperPusher
 
         if is_git_flow_installed
           # supposed, that with git flow you should release from develop branch
-          if current_branch != 'develop'
+          if current_branch != 'develop' && current_branch.split('/').first != 'hotfix'
             puts "Warning: You're in branch (#{current_branch})!".yellow
             ask_sure_Y
           end
