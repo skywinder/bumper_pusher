@@ -33,13 +33,13 @@ module BumperPusher
         end
       end
 
-      current_branch = get_current_branch()
+      current_branch = get_current_branch
 
       unless @options[:beta]
 
-        if is_gitflow_installed
+        if is_git_flow_installed
           # supposed, that with git flow you should release from develop branch
-          if current_branch != 'develop'
+          if current_branch != 'develop' && !is_branch_hotfix?
             puts "Warning: You're in branch (#{current_branch})!".yellow
             ask_sure_Y
           end
@@ -73,7 +73,12 @@ module BumperPusher
       case all_specs.count
         when 0
           puts 'No spec files found. -> Exit.'
-          exit
+          if is_debug?
+            puts 'Debug -> set @spec_mode to gem -> continue'
+            @spec_mode = GEM_SPEC_TYPE
+          else
+            exit
+          end
         when 1
           spec_file = all_specs[0]
         else
@@ -101,6 +106,10 @@ module BumperPusher
 
       spec_file.sub('./', '')
 
+    end
+
+    def is_debug?
+      (ENV['RUBYLIB'] =~ /ruby-debug-ide/) ? true : false
     end
 
     def find_current_gem_file
@@ -184,11 +193,13 @@ module BumperPusher
     end
 
     def ask_sure_Y
-      puts 'Are you sure? Press Y to continue:'
-      str = gets.chomp
-      if str != 'Y'
-        puts '-> exit'
-        exit
+      unless @options[:dry_run]
+        puts 'Are you sure? Press Y to continue:'
+        str = gets.chomp
+        if str != 'Y'
+          puts '-> exit'
+          exit
+        end
       end
     end
 
@@ -202,7 +213,7 @@ module BumperPusher
     def execute_line_if_not_dry_run(line, check_exit = true)
       if @options[:dry_run]
         puts "Dry run: #{line}"
-        nil
+        check_exit ? nil : 0
       else
         puts line
         value = %x[#{line}]
@@ -263,7 +274,9 @@ module BumperPusher
       check_repo_is_clean_or_dry_run
 
       unless @options[:beta]
-        execute_line_if_not_dry_run('git pull')
+        unless is_branch_hotfix?
+          execute_line_if_not_dry_run('git pull')
+        end
         current_branch = get_current_branch
         execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
       end
@@ -275,7 +288,7 @@ module BumperPusher
 
       unless @options[:beta]
         execute_line_if_not_dry_run('git push --all')
-          if is_gitflow_installed
+        if is_git_flow_installed && !is_branch_hotfix?
           execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
         end
       end
@@ -288,16 +301,23 @@ module BumperPusher
       if @options[:commit]
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
-        if is_gitflow_installed
-
-          if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
-            execute_line_if_not_dry_run('git checkout master')
+        if is_git_flow_installed
+          if is_branch_hotfix?
+            branch_split = get_current_branch.split('/').last
+            if execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}", check_exit = false) == 0
+              execute_line_if_not_dry_run('git checkout master')
+            end
+          else
+            if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
+              execute_line_if_not_dry_run('git checkout master')
+            end
           end
         end
         execute_line_if_not_dry_run("git tag #{bumped_version}")
       end
 
       if @options[:push]
+        execute_line_if_not_dry_run('git push --all')
         execute_line_if_not_dry_run('git push --tags')
 
         if @spec_mode == POD_SPEC_TYPE
@@ -339,12 +359,12 @@ module BumperPusher
           puts 'Cancelled bumping: no github_changelog_generator gem found'
         else
 
-          if is_gitflow_installed
+          if is_git_flow_installed
             execute_line_if_not_dry_run("git flow hotfix start update-changelog", check_exit = false)
           end
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
-          if is_gitflow_installed
+          if is_git_flow_installed
 
             if execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false) == 0
               current_branch = get_current_branch
@@ -392,9 +412,15 @@ module BumperPusher
       execute_line_if_not_dry_run("git push --delete origin #{result}")
     end
 
-    def is_gitflow_installed()
+    def is_git_flow_installed
       system("git flow version") ? true : false
     end
+
+    def is_branch_hotfix?
+      branch = get_current_branch
+      branch.include? 'hotfix'
+    end
+
   end
 
 end
