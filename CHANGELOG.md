@@ -1,17 +1,26 @@
 # Change Log
 
+<<<<<<< HEAD
 ## [Unreleased](https://github.com/skywinder/bumper_pusher/tree/HEAD) (2015-03-03)
 
 [Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.15...HEAD)
+=======
+## [0.1.15](https://github.com/skywinder/bumper_pusher/tree/0.1.15) (2015-03-03)
+
+[Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.14...0.1.15)
+>>>>>>> hotfix/fix-13-2
 
 **Closed issues:**
 
 - Support git flow hotfixes [\#13](https://github.com/skywinder/bumper_pusher/issues/13)
 
+<<<<<<< HEAD
 ## [0.1.15](https://github.com/skywinder/bumper_pusher/tree/0.1.15) (2015-02-09)
 
 [Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.14...0.1.15)
 
+=======
+>>>>>>> hotfix/fix-13-2
 ## [0.1.14](https://github.com/skywinder/bumper_pusher/tree/0.1.14) (2015-02-09)
 
 [Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.13...0.1.14)

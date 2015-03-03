@@ -305,9 +305,21 @@ module BumperPusher
         if is_git_flow_installed
           if is_branch_hotfix?
             branch_split = get_current_branch.split('/').last
-            if execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}", check_exit = false) == 0
-              execute_line_if_not_dry_run('git checkout master')
+            unless execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}", check_exit = false) == 0
+              puts 'Automatic merge failed, please open new terminal, resolve conflicts, then press Y. Or press N to terminate'
+              str = ''
+              while str != 'Y' && str != 'N'
+                str = gets.chomp
+                puts str
+              end
+              if str == 'N'
+                puts '-> exit'
+                exit
+              end
+              execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}")
             end
+            execute_line_if_not_dry_run('git checkout master')
+
           else
             if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
               execute_line_if_not_dry_run('git checkout master')
@@ -428,6 +440,7 @@ module BumperPusher
 end
 
 if $0 == __FILE__
-  puts "bumper.rb self run"
+  puts 'bumper.rb self run'
+
   BumperPusher::Bumper.new({}).execute_interactive_if_not_dry_run("pwd")
 end
