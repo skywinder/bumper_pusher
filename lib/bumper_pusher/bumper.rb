@@ -39,7 +39,7 @@ module BumperPusher
 
         if is_git_flow_installed
           # supposed, that with git flow you should release from develop branch
-          if current_branch != 'develop' && current_branch.split('/').first != 'hotfix'
+          if current_branch != 'develop' && !is_branch_hotfix?
             puts "Warning: You're in branch (#{current_branch})!".yellow
             ask_sure_Y
           end
@@ -274,7 +274,9 @@ module BumperPusher
       check_repo_is_clean_or_dry_run
 
       unless @options[:beta]
-        execute_line_if_not_dry_run('git pull')
+        unless is_branch_hotfix?
+          execute_line_if_not_dry_run('git pull')
+        end
         current_branch = get_current_branch
         execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
       end
