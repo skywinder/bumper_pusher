@@ -289,7 +289,7 @@ module BumperPusher
       unless @options[:beta]
         execute_line_if_not_dry_run('git push --all')
         if is_git_flow_installed && !is_branch_hotfix?
-          execute_line_if_not_dry_run("git flow release start #{bumped_version}", check_exit = false)
+          execute_line_if_not_dry_run("git flow release start #{bumped_version}")
         end
       end
 
@@ -305,25 +305,16 @@ module BumperPusher
           if is_branch_hotfix?
             branch_split = get_current_branch.split('/').last
             unless execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}", check_exit = false) == 0
-              puts 'Automatic merge failed, please open new terminal, resolve conflicts, then press Y. Or press N to terminate'
-              str = ''
-              while str != 'Y' && str != 'N'
-                str = gets.chomp
-                puts str
-              end
-              if str == 'N'
-                puts '-> exit'
-                exit
-              end
+              ask_to_merge
               execute_line_if_not_dry_run("git flow hotfix finish -n #{branch_split}")
             end
-            execute_line_if_not_dry_run('git checkout master')
-
           else
-            if execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
-              execute_line_if_not_dry_run('git checkout master')
+            unless execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}", check_exit = false) == 0
+              ask_to_merge
+              execute_line_if_not_dry_run("git flow release finish -n #{bumped_version}")
             end
           end
+          execute_line_if_not_dry_run('git checkout master')
         end
         execute_line_if_not_dry_run("git tag #{bumped_version}")
       end
@@ -372,19 +363,16 @@ module BumperPusher
         else
 
           if is_git_flow_installed
-            execute_line_if_not_dry_run("git flow hotfix start update-changelog", check_exit = false)
+            execute_line_if_not_dry_run('git flow hotfix start update-changelog')
           end
           execute_line_if_not_dry_run('github_changelog_generator')
           execute_line_if_not_dry_run("git commit CHANGELOG.md -m \"Update changelog for version #{bumped_version}\"")
           if is_git_flow_installed
-
-            if execute_line_if_not_dry_run("git flow hotfix finish -n update-changelog", check_exit = false) == 0
-              current_branch = get_current_branch
-              execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{current_branch}")
-            else
-              execute_line_if_not_dry_run('git push')
+            unless execute_line_if_not_dry_run('git flow hotfix finish -n update-changelog', check_exit = false) == 0
+              ask_to_merge
+              execute_line_if_not_dry_run('git flow hotfix finish -n update-changelog')
             end
-
+            execute_line_if_not_dry_run("git push && git checkout master && git push && git checkout #{get_current_branch}")
           else
             execute_line_if_not_dry_run('git push')
           end
@@ -392,6 +380,19 @@ module BumperPusher
         end
       end
 
+    end
+
+    def ask_to_merge
+      puts 'Automatic merge failed, please open new terminal, resolve conflicts, then press Y. Or press N to terminate'
+      str = ''
+      while str != 'Y' && str != 'N'
+        str = gets.chomp
+        puts str
+      end
+      if str == 'N'
+        puts '-> exit'
+        exit
+      end
     end
 
     def find_version_file
