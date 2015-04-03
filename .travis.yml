@@ -1,13 +1,10 @@
 language: ruby
-cache: bundler
 
 before_install:
   - gem update --system
   - gem --version
 rvm:
   - 2.1.0
-gemfile:
-  - Gemfile
 
 notifications:
   email:
