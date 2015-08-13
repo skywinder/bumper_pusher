@@ -47,7 +47,7 @@ This gem make bumping and pushing your ruby gems easy and fast!
 - **Very easy to use**: just print `bumper_pusher` in your repo folder.
 - Support version storage directly in `gemspec` file and in `version.rb`
 - Check that you're bumping from `master`. (otherwise print warning with confirmation)
-- Check that your `git status` in clean
+- Check that your `git status` is clean
 - Ability to build test gem easily  `bumper_pusher -b`
 - Ability to generate changelog for new version by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
 - Support both `gemspec` and `podspec` files
