@@ -404,8 +404,9 @@ module BumperPusher
       arr = `find . -name 'version.rb'  -maxdepth 4`.split("\n")
       case arr.count
         when 0
-          puts "version.rb file found (#{arr[0]}) -> bump this file"
+          puts "version.rb file not found"
         when 1
+          puts "version.rb file found (#{arr[0]}) -> bump this file"
           version_file = arr[0]
         else
           puts 'More than 1 version.rb file found. -> skip'
