@@ -41,13 +41,13 @@ module BumperPusher
           # supposed, that with git flow you should release from develop branch
           if current_branch != 'develop' && !is_branch_hotfix?
             puts "Warning: You're in branch (#{current_branch})!".yellow
-            ask_sure_Y
+            ask_sure_y
           end
         else
           # supposed, that w/o git flow you should release from master or release branch
           if current_branch != 'master' || !/release/.match(current_branch)[0].nil?
             puts "Warning: You're in branch (#{current_branch})!".yellow
-            ask_sure_Y
+            ask_sure_y
           end
         end
 
@@ -61,8 +61,8 @@ module BumperPusher
 
     def find_spec_file
 
-      pod_arr = execute_line("find . -name '*.#{POD_SPEC_TYPE}'").split("\n")
-      gem_arr = execute_line("find . -name '*.#{GEM_SPEC_TYPE}'").split("\n")
+      pod_arr = execute_line("find . -name '*.#{POD_SPEC_TYPE}'  -maxdepth 1").split("\n")
+      gem_arr = execute_line("find . -name '*.#{GEM_SPEC_TYPE}' -maxdepth 1").split("\n")
       if gem_arr.any? && pod_arr.any?
         puts 'Warning: both podspec and gemspec found!'.yellow
       end
@@ -113,7 +113,7 @@ module BumperPusher
     end
 
     def find_current_gem_file
-      list_of_specs = execute_line("find . -name '*.gem'")
+      list_of_specs = execute_line("find . -name '*.gem' -maxdepth 1")
       arr = list_of_specs.split("\n")
 
       spec_file = ''
@@ -186,13 +186,13 @@ module BumperPusher
       puts "Bump version: #{versions_array.join('.')} -> #{bumped_version}"
 
       unless @options[:dry_run] || @options[:beta]
-        ask_sure_Y
+        ask_sure_y
       end
 
       bumped_version
     end
 
-    def ask_sure_Y
+    def ask_sure_y
       unless @options[:dry_run]
         puts 'Are you sure? Press Y to continue:'
         str = gets.chomp
@@ -210,6 +210,8 @@ module BumperPusher
       output
     end
 
+# @param [Object] line
+# @param [Object] check_exit
     def execute_line_if_not_dry_run(line, check_exit = true)
       if @options[:dry_run]
         puts "Dry run: #{line}"
@@ -279,6 +281,7 @@ module BumperPusher
         end
         current_branch = get_current_branch
         execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
+        execute_line_if_not_dry_run('git push --all')
       end
 
       version_file = find_version_file
@@ -316,6 +319,7 @@ module BumperPusher
           end
           execute_line_if_not_dry_run('git checkout master')
         end
+        execute_line_if_not_dry_run('git push --all')
         execute_line_if_not_dry_run("git tag #{bumped_version}")
       end
 
@@ -397,11 +401,12 @@ module BumperPusher
 
     def find_version_file
       version_file = nil
-      arr = `find . -name 'version.rb'`.split("\n")
+      arr = `find . -name 'version.rb'  -maxdepth 4`.split("\n")
       case arr.count
         when 0
-          puts "version.rb file found (#{arr[0]}) -> bump this file"
+          puts "version.rb file not found"
         when 1
+          puts "version.rb file found (#{arr[0]}) -> bump this file"
           version_file = arr[0]
         else
           puts 'More than 1 version.rb file found. -> skip'
@@ -426,7 +431,7 @@ module BumperPusher
     end
 
     def is_git_flow_installed
-      system("git flow version") ? true : false
+      system('git flow version') ? true : false
     end
 
     def is_branch_hotfix?
