@@ -281,6 +281,7 @@ module BumperPusher
         end
         current_branch = get_current_branch
         execute_line_if_not_dry_run("git checkout master && git pull && git checkout #{current_branch}")
+        execute_line_if_not_dry_run('git pull --all')
         execute_line_if_not_dry_run('git push --all')
       end
 
@@ -326,6 +327,7 @@ module BumperPusher
       if @options[:push]
         execute_line_if_not_dry_run('git push --all')
         execute_line_if_not_dry_run('git push --tags')
+
 
         if @spec_mode == POD_SPEC_TYPE
           execute_line_if_not_dry_run("pod trunk push #{@spec_file}")
