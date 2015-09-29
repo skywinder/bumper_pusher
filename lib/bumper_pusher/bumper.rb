@@ -67,21 +67,21 @@ module BumperPusher
       spec_file = ""
 
       case all_specs.count
-      when 0
-        puts "No spec files found. -> Exit."
-        if is_debug?
-          puts "Debug -> set @spec_mode to gem -> continue"
-          @spec_mode = GEM_SPEC_TYPE
+        when 0
+          puts "No spec files found. -> Exit."
+          if is_debug?
+            puts "Debug -> set @spec_mode to gem -> continue"
+            @spec_mode = GEM_SPEC_TYPE
+          else
+            exit
+          end
+        when 1
+          spec_file = all_specs[0]
         else
-          exit
-        end
-      when 1
-        spec_file = all_specs[0]
-      else
-        puts "Which spec should be used?"
-        all_specs.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
-        input_index = Integer(gets.chomp)
-        spec_file = all_specs[input_index - 1]
+          puts "Which spec should be used?"
+          all_specs.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
+          input_index = Integer(gets.chomp)
+          spec_file = all_specs[input_index - 1]
       end
 
       if spec_file.nil?
@@ -110,17 +110,17 @@ module BumperPusher
       spec_file = ""
 
       case arr.count
-      when 0
-        return "test.#{POD_SPEC_TYPE}" if @options[:dry_run]
-        puts "No #{POD_SPEC_TYPE} files found. -> Exit."
-        exit
-      when 1
-        spec_file = arr[0]
-      else
-        puts "Which spec should be used?"
-        arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
-        input_index = Integer(gets.chomp)
-        spec_file = arr[input_index - 1]
+        when 0
+          return "test.#{POD_SPEC_TYPE}" if @options[:dry_run]
+          puts "No #{POD_SPEC_TYPE} files found. -> Exit."
+          exit
+        when 1
+          spec_file = arr[0]
+        else
+          puts "Which spec should be used?"
+          arr.each_with_index { |file, index| puts "#{index + 1}. #{file}" }
+          input_index = Integer(gets.chomp)
+          spec_file = arr[input_index - 1]
       end
 
       if spec_file.nil?
@@ -156,17 +156,17 @@ module BumperPusher
         bumped_version = versions_array.join(".") + ".1"
       else
         case @options[:bump_number]
-        when :major
-          bumped_result[0] += 1
-          bumped_result[1] = 0
-          bumped_result[2] = 0
-        when :minor
-          bumped_result[1] += 1
-          bumped_result[2] = 0
-        when :patch
-          bumped_result[2] += 1
-        else
-          fail("unknown bump_number")
+          when :major
+            bumped_result[0] += 1
+            bumped_result[1] = 0
+            bumped_result[2] = 0
+          when :minor
+            bumped_result[1] += 1
+            bumped_result[2] = 0
+          when :patch
+            bumped_result[2] += 1
+          else
+            fail("unknown bump_number")
         end
         bumped_version = bumped_result.join(".")
       end
@@ -283,6 +283,14 @@ module BumperPusher
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
       end
 
+      gem = find_current_gem_file
+      execute_line_if_not_dry_run("gem build #{@spec_file}")
+      if @options[:install]
+        if @spec_mode == GEM_SPEC_TYPE
+          execute_line_if_not_dry_run("gem install #{gem}")
+        end
+      end
+
       if @options[:commit]
         execute_line_if_not_dry_run("git commit --all -m \"Update #{@spec_mode} to version #{bumped_version}\"")
 
@@ -313,13 +321,7 @@ module BumperPusher
           execute_line_if_not_dry_run("pod trunk push #{@spec_file}")
         else
           if @spec_mode == GEM_SPEC_TYPE
-            execute_line_if_not_dry_run("gem build #{@spec_file}")
-            gem = find_current_gem_file
             execute_line_if_not_dry_run("gem push #{gem}")
-
-            if @options[:install]
-              execute_line_if_not_dry_run("gem install #{gem}")
-            end
 
             execute_line_if_not_dry_run("rm #{gem}")
           else
@@ -383,13 +385,13 @@ module BumperPusher
       version_file = nil
       arr = `find . -name 'version.rb'  -maxdepth 4`.split("\n")
       case arr.count
-      when 0
-        puts "version.rb file not found"
-      when 1
-        puts "version.rb file found (#{arr[0]}) -> bump this file"
-        version_file = arr[0]
-      else
-        puts "More than 1 version.rb file found. -> skip"
+        when 0
+          puts "version.rb file not found"
+        when 1
+          puts "version.rb file found (#{arr[0]}) -> bump this file"
+          version_file = arr[0]
+        else
+          puts "More than 1 version.rb file found. -> skip"
       end
 
       version_file ? version_file.sub("./", "") : @spec_file
