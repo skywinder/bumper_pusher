@@ -336,7 +336,7 @@ module BumperPusher
           execute_interactive_if_not_dry_run("gem install #{gem}")
 
           execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" README.md")
-          execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{version_file}")
+          execute_line_if_not_dry_run("sed -i \"\" \"s/#{bumped_version}/#{result}/\" #{find_version_file}")
           execute_line_if_not_dry_run("rm #{gem}")
         else
           fail "Unknown spec type"
