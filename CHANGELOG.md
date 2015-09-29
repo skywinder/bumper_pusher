@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.2.2](https://github.com/skywinder/bumper_pusher/tree/0.2.2) (2015-09-29)
+[Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.2.0...0.2.2)
+
+## [0.2.0](https://github.com/skywinder/bumper_pusher/tree/0.2.0) (2015-09-29)
+[Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.19...0.2.0)
+
+## [0.1.19](https://github.com/skywinder/bumper_pusher/tree/0.1.19) (2015-09-29)
+[Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.18...0.1.19)
+
 ## [0.1.18](https://github.com/skywinder/bumper_pusher/tree/0.1.18) (2015-08-31)
 [Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.1.17...0.1.18)
 
