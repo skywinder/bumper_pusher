@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bumper_pusher (0.1.18)
+    bumper_pusher (0.1.19)
       colorize (~> 0.7)
       github_changelog_generator (>= 1.2, < 5.0)
 
@@ -22,7 +22,7 @@ GEM
       multi_json (>= 1.7.5, < 2.0)
       nokogiri (~> 1.6.6)
       oauth2
-    github_changelog_generator (1.8.5)
+    github_changelog_generator (1.9.0)
       colorize (~> 0.7)
       github_api (~> 0.12)
     hashie (3.4.2)
