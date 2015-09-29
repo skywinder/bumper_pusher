@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'bumper_pusher'
+require "bumper_pusher"
 
 BumperPusher::Pusher.new
