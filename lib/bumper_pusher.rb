@@ -1,11 +1,10 @@
 #!/usr/bin/env ruby
 
-require_relative 'bumper_pusher/version'
-require_relative 'bumper_pusher/parser'
-require_relative 'bumper_pusher/bumper'
+require_relative "bumper_pusher/version"
+require_relative "bumper_pusher/parser"
+require_relative "bumper_pusher/bumper"
 
 module BumperPusher
-
   class Pusher
     attr_reader :options
     def initialize
@@ -19,14 +18,8 @@ module BumperPusher
       else
         @parser.run_bumping_script
       end
-
     end
   end
-
-
 end
 
-if $0 == __FILE__
-  bumper = BumperPusher::Pusher.new
-
-end
+bumper = BumperPusher::Pusher.new if $PROGRAM_NAME == __FILE__
