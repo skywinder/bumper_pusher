@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    bumper_pusher (0.2.0.1)
+    bumper_pusher (0.2.1)
       colorize (~> 0.7)
       github_changelog_generator (>= 1.2, < 5.0)
 
