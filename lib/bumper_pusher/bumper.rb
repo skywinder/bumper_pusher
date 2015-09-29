@@ -111,7 +111,7 @@ module BumperPusher
 
       case arr.count
         when 0
-          return "test.#{POD_SPEC_TYPE}" if @options[:dry_run]
+          return "#{File.basename find_spec_file}-#{find_version_in_file}" if @options[:dry_run]
           puts "No #{POD_SPEC_TYPE} files found. -> Exit."
           exit
         when 1
@@ -131,7 +131,7 @@ module BumperPusher
       spec_file.sub("./", "")
     end
 
-    def find_version_in_file(podspec)
+    def find_version_in_file(podspec=find_version_file)
       readme = File.read(podspec)
 
       # try to find version in format 1.22.333
@@ -267,8 +267,7 @@ module BumperPusher
         execute_line_if_not_dry_run("git push --all")
       end
 
-      version_file = find_version_file
-      result, versions_array = find_version_in_file(version_file)
+      result, versions_array = find_version_in_file
       bumped_version = bump_version(versions_array)
 
       unless @options[:beta]
@@ -280,7 +279,7 @@ module BumperPusher
 
       if @options[:bump]
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" README.md")
-        execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{version_file}")
+        execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{find_version_file}")
       end
 
       gem = find_current_gem_file
