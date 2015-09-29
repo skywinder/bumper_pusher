@@ -282,8 +282,8 @@ module BumperPusher
         execute_line_if_not_dry_run("sed -i \"\" \"s/#{result}/#{bumped_version}/\" #{find_version_file}")
       end
 
-      gem = find_current_gem_file
       execute_line_if_not_dry_run("gem build #{@spec_file}")
+      gem = find_current_gem_file
       if @options[:install]
         if @spec_mode == GEM_SPEC_TYPE
           execute_line_if_not_dry_run("gem install #{gem}")
