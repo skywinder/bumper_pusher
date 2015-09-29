@@ -210,7 +210,7 @@ module BumperPusher
           check_exit_status(value)
           value
         else
-          $CHILD_STATUS.exitstatus
+          $?.exitstatus
         end
       end
     end
@@ -250,8 +250,8 @@ module BumperPusher
     end
 
     def check_exit_status(output)
-      if $CHILD_STATUS.exitstatus != 0
-        puts "Output:\n#{output}\nExit status = #{$CHILD_STATUS.exitstatus} ->Terminate script."
+      if $?.exitstatus != 0
+        puts "Output:\n#{output}\nExit status = #{$?.exitstatus} ->Terminate script."
         exit
       end
     end
