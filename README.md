@@ -15,10 +15,10 @@ This gem make bumping and pushing your ruby gems easy and fast!
 	[sudo] gem install bumper_pusher
 
 ## Usage
-- Just print: `bumper_pusher` and that's it!
-- If you want to test, that all works as expected: try **dry_run** mode: `bumper_pusher --dry-run` 
+- Just type: `bumper_pusher` and that's it!
+- If you want to test that all works as expected: try **dry_run** mode: `bumper_pusher --dry-run` 
 - To bump version print: `bumper_pusher [option]`
-	-  `-r` for bump release (`1.2.3` -> `2.0.0`)
+	- `-r` for bump release (`1.2.3` -> `2.0.0`)
 	- `-m` for bump minor (`1.2.3` -> `1.3.0`)
 	- `-p` for bump patch (`1.2.3` -> `1.2.4`) **default option**
 	
@@ -44,13 +44,13 @@ This gem make bumping and pushing your ruby gems easy and fast!
 
 ## Features & Benefits of this project
 
-- **Very easy to use**: just print `bumper_pusher` in your repo folder.
-- Support version storage directly in `gemspec` file and in `version.rb`
-- Check that you're bumping from `master`. (otherwise print warning with confirmation)
-- Check that your `git status` is clean
-- Ability to build test gem easily  `bumper_pusher -b`
-- Ability to generate changelog for new version by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
-- Support both `gemspec` and `podspec` files
+- **Very easy to use**: just type `bumper_pusher` in your repo folder
+- Supports version storage directly in `gemspec` file and in `version.rb`
+- Checks that you're bumping from the `master` branch (otherwise prints a warning with confirmation)
+- Checks that your `git status` is clean
+- Ability to easily test build your gem `bumper_pusher -b`
+- Ability to generate changelog for the new version using [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
+- Supports both `gemspec` and `podspec` files
 
 ## Contributing
 
