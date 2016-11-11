@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.2.4](https://github.com/skywinder/bumper_pusher/tree/0.2.4) (2016-11-11)
+[Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.2.3...0.2.4)
+
+**Merged pull requests:**
+
+- README: Nitpick wording \[ci skip\] [\#14](https://github.com/skywinder/bumper_pusher/pull/14) ([olleolleolle](https://github.com/olleolleolle))
+
 ## [0.2.3](https://github.com/skywinder/bumper_pusher/tree/0.2.3) (2015-10-08)
 [Full Changelog](https://github.com/skywinder/bumper_pusher/compare/0.2.2...0.2.3)
 
