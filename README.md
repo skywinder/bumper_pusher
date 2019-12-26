@@ -52,6 +52,15 @@ This gem make bumping and pushing your ruby gems easy and fast!
 - Ability to generate changelog for the new version using [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
 - Supports both `gemspec` and `podspec` files
 
+## Debug
+
+### For Ruby v2.x
+Follow by [this instructions](https://dev.to/dnamsons/ruby-debugging-in-vscode-3bkj)
+```
+gem install ruby-debug-ide
+gem install debase
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/skywinder/bumper_pusher/fork )
