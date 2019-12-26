@@ -44,6 +44,9 @@ module BumperPusher
         opts.on("-c", "--[no]-changelog", "Auto generation of changelog and pushing it origin. Default is true") do |v|
           options[:changelog] = v
         end
+        opts.on("-nc", "--no-changelog", "Auto generation of changelog and pushing it origin. Default is true") do |v|
+          options[:changelog] = !v
+        end
       end.parse!
       options
     end
