@@ -24,32 +24,30 @@ This gem make bumping and pushing your ruby gems easy and fast!
 	
 - To install locally your gemspec `bumper_pusher -b`
 
-### Params
-	Usage: bumper_pusher [options]
-	    -d, --dry-run                    Dry run
-	        --release                    Bump release version
-	    -m, --minor                      Bump minor version
-	    -p, --patch                      Bump patch version
-	    -r, --revert                     Revert last bump
-	    -i, --[no-]install               Install this gem after push it. Default is true.
-	    -b, --beta                       Build beta gem without commit and push
-	    -v, --version                    Print version number
-	    -c, --[no]-changelog             Auto generation of changelog and pushing it origin. Default is true
-
-## Alternatives
-- https://github.com/peritus/bumpversion
-- https://github.com/vojtajina/grunt-bump
-- https://github.com/gregorym/bump
-- https://github.com/svenfuchs/gem-release
+### Params (`bumper_pusher -h`)
+    -d, --dry-run                    Dry run
+        --release                    Bump release version
+    -m, --minor                      Bump minor version
+    -p, --patch                      Bump patch version
+    -r, --revert                     Revert last bump
+    -i, --[no-]install               Install this gem after push it. Default is true.
+    -b, --beta                       Build beta gem without commit and push
+    -v, --version                    Print version number
+    -g, --gen-changelog              Auto generation of changelog and pushing it origin. Default is false
 
 ## Features & Benefits of this project
+
+## Prerequirements
+
+This tool usess `git flow` three structure. 
+Befire run, please consider to run `git flow init` (default options is fine) 
 
 - **Very easy to use**: just type `bumper_pusher` in your repo folder
 - Supports version storage directly in `gemspec` file and in `version.rb`
 - Checks that you're bumping from the `master` branch (otherwise prints a warning with confirmation)
 - Checks that your `git status` is clean
-- Ability to easily test build your gem `bumper_pusher -b`
-- Ability to generate changelog for the new version using [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)
+- Ability to easily test build your gem `bumper_pusher -b` (it adds extra verions prefix to avoind version collising with release veriosions)
+- Ability to generate changelog for the new version using [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator) (but broken with latest gcg releases)
 - Supports both `gemspec` and `podspec` files
 
 ## Debug
@@ -58,7 +56,6 @@ This gem make bumping and pushing your ruby gems easy and fast!
 Follow by [this instructions](https://dev.to/dnamsons/ruby-debugging-in-vscode-3bkj)
 ```
 gem install ruby-debug-ide
-gem install debase
 ```
 
 ## Contributing
@@ -68,3 +65,11 @@ gem install debase
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+
+### Alternatives
+- https://github.com/peritus/bumpversion
+- https://github.com/vojtajina/grunt-bump
+- https://github.com/gregorym/bump
+- https://github.com/svenfuchs/gem-release
+

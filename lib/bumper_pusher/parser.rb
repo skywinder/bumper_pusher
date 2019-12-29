@@ -41,7 +41,7 @@ module BumperPusher
           puts "Version: #{BumperPusher::VERSION}"
           exit
         end
-        opts.on("-gc", "--gen-changelog", "Auto generation of changelog and pushing it origin. Default is false") do |v|
+        opts.on("-g", "--gen-changelog", "Auto generation of changelog and pushing it origin. Default is false") do |v|
           options[:changelog] = v
         end        
       end.parse!
