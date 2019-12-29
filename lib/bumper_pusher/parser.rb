@@ -7,7 +7,7 @@ module BumperPusher
     end
 
     def parse_options
-      options = { dry_run: false, bump_number: :patch, changelog: true, bump: true, commit: true, build: true, push: true, install: true }
+      options = { dry_run: false, bump_number: :patch, changelog: false, bump: true, commit: true, build: true, push: true, install: true }
 
       OptionParser.new do |opts|
         opts.banner = "Usage: bumper_pusher [options]"
@@ -41,12 +41,9 @@ module BumperPusher
           puts "Version: #{BumperPusher::VERSION}"
           exit
         end
-        opts.on("-c", "--[no]-changelog", "Auto generation of changelog and pushing it origin. Default is true") do |v|
+        opts.on("-gc", "--gen-changelog", "Auto generation of changelog and pushing it origin. Default is false") do |v|
           options[:changelog] = v
-        end
-        opts.on("-nc", "--no-changelog", "Auto generation of changelog and pushing it origin. Default is true") do |v|
-          options[:changelog] = !v
-        end
+        end        
       end.parse!
       options
     end
