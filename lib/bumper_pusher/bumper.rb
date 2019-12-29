@@ -38,13 +38,13 @@ module BumperPusher
         if is_git_flow_installed
           # supposed, that with git flow you should release from develop branch
           if current_branch != "develop" && !is_branch_hotfix?
-            puts "Warning: You're in branch (#{current_branch})!".yellow
+            puts "Warning: You're in branch (#{current_branch})!\n(supposed, that with git flow you should release from develop branch)".yellow
             ask_sure_y
           end
         else
           # supposed, that w/o git flow you should release from master or release branch
           if current_branch != "master" || !/release/.match(current_branch)[0].nil?
-            puts "Warning: You're in branch (#{current_branch})!".yellow
+            puts "Warning: You're in branch (#{current_branch})!\n)(supposed, that you release from master or release branch usually)".yellow
             ask_sure_y
           end
         end
