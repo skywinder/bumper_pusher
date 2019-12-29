@@ -37,10 +37,12 @@ This gem make bumping and pushing your ruby gems easy and fast!
 
 ## Features & Benefits of this project
 
-## Prerequirements
+## 
 
+_Prerequirements (optional)
 This tool usess `git flow` three structure. 
-Befire run, please consider to run `git flow init` (default options is fine) 
+Before run, please consider to run `git flow init` (default options is fine)._
+
 
 - **Very easy to use**: just type `bumper_pusher` in your repo folder
 - Supports version storage directly in `gemspec` file and in `version.rb`
